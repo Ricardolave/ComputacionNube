@@ -1,0 +1,75 @@
+.main-container{
+    background-image: url(../components/images/wp.jpg);
+    background-position: right;
+    background-attachment: fixed;
+    opacity: 0.5px;
+    height: 100vh;
+}
+
+.th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: white;
+}
+
+.td{
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.table{
+    background-color: white;
+}
+.dark-thead{
+    color:white;
+    background-color: black;
+    font-weight: bold;
+}
+
+.table-responsive{
+    height: 50 px;
+}
+
+.h1{
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+    font-weight: 500;
+}
+
+.espacios{
+    display: inline-block;
+    width: 100%;
+}
+
+.espaciosup{
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.espaciosup2{
+    padding-top: 5px;
+}
+
+.espacioizq{
+    padding-left: 5 px;
+}
+
+.form-group{
+    text-align: center;
+    justify-content: center;
+}
+
+
+.thblanco{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    font-family: 'Courier New', Courier, monospace;
+    border-radius: 30px;
+}
+
+.input-group{
+    padding-top: 10px;
+    padding-bottom: 3px;
+}
