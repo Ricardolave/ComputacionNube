@@ -1,0 +1,39 @@
+{
+  "applications": ["uanfilms"],
+  "changelogDate": "20220831164709",
+  "clientRootFolder": "uanfilms",
+  "databaseType": "sql",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "actor",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lastName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "birthDay",
+      "fieldType": "Instant"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "uanfilms",
+  "name": "Actor",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "movie",
+      "otherEntityRelationshipName": "actor",
+      "ownerSide": false,
+      "relationshipName": "cast",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "no"
+}
