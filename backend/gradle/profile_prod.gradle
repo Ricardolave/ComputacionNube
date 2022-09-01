@@ -1,5 +1,4 @@
 dependencies {
-    implementation "io.r2dbc:r2dbc-mssql"
     implementation "com.microsoft.sqlserver:mssql-jdbc"
     testImplementation "org.testcontainers:mssqlserver"
     implementation "org.liquibase.ext:liquibase-mssql:4.12.0"
@@ -36,6 +35,9 @@ processResources {
         filter {
             it.replace("#project.version#", version)
         }
+        filter {
+            it.replace("#spring.profiles.active#", profiles)
+        }
     }
 }
 
@@ -55,11 +57,6 @@ task integrationTest(type: Test) {
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
     reports.html.enabled = false
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
-        jvmArgs += [
-            "-XX:+AllowRedefinitionToAddDeleteMethods"
-        ]
-    }
 }
 integrationTest.dependsOn test
 

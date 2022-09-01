@@ -16,9 +16,6 @@
 spring:
   application:
     name: uanfilms
-  autoconfigure:
-    exclude:
-      - org.springframework.cloud.gateway.config.GatewayMetricsAutoConfiguration
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: test
@@ -29,6 +26,9 @@ spring:
     host: localhost
   main:
     allow-bean-definition-overriding: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   messages:
     basename: i18n/messages
   task:
@@ -72,7 +72,7 @@ jhipster:
     authentication:
       jwt:
         # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
-        base64-secret: Zjc3ZDI2MzcyYzI1MzI2YTljMzRmYjU4NWIxOTM4MmFlOWY5YmEzY2JhMmI5NTM4YmZlMjhlMjA3NWViNDEwNTU3MzFkMDc5YTQ1MDM3NmVjNWVkY2ViZmJiYWI4ODNjZTI2YmExZGIzZmI0ZjcyZTE4N2EwNGM2NjQzOTVmYmI=
+        base64-secret: MWMxNzMyNzcwYjYxZjdjYTRmYTdjOTgzOTYwNDE5OGE4MzNiMmNmNjU0MzRkN2YyN2YyYjE1OWRlNzNlMmU1NjYzMjk3YWNhZjE0YjNlNmE4Njc1NWI3YjYwYzZlZDk5YTViMmU5NWI0NTQ0YmE2YmVjYTAwNGNiZGQ1Nzk0YTY=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
 

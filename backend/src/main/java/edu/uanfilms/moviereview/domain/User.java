@@ -1,52 +1,50 @@
 package edu.uanfilms.moviereview.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import edu.uanfilms.moviereview.config.Constants;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.annotation.Transient;
+
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+
 
 /**
  * A user.
  */
-@Table("jhi_user")
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "user")
-public class User extends AbstractAuditingEntity implements Serializable {
+@Table(name="jhi_user")
+@Entity
+public class User  implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    private Long id;
 
     @NotNull
-    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @Id
     @Size(min = 1, max = 50)
     private String login;
 
     @JsonIgnore
     @NotNull
     @Size(min = 60, max = 60)
-    @Column("password_hash")
+    @Column(name="password_hash")
     private String password;
 
     @Size(max = 50)
-    @Column("first_name")
+    @Column(name="first_name")
     private String firstName;
 
     @Size(max = 50)
-    @Column("last_name")
+    @Column(name="last_name")
     private String lastName;
 
     @Email
@@ -57,37 +55,31 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private boolean activated = false;
 
     @Size(min = 2, max = 10)
-    @Column("lang_key")
+    @Column(name="lang_key")
     private String langKey;
 
     @Size(max = 256)
-    @Column("image_url")
+    @Column(name="image_url")
     private String imageUrl;
 
     @Size(max = 20)
-    @Column("activation_key")
+    @Column(name="activation_key")
     @JsonIgnore
     private String activationKey;
 
     @Size(max = 20)
-    @Column("reset_key")
+    @Column(name="reset_key")
     @JsonIgnore
     private String resetKey;
 
-    @Column("reset_date")
+    @Column(name="reset_date")
     private Instant resetDate = null;
 
-    @JsonIgnore
     @Transient
+    @ManyToMany
+    @JoinTable(name = "jhi_user_authority", joinColumns = @JoinColumn(name = "user_name"), inverseJoinColumns = @JoinColumn(name = "authority_name"))
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Authority> authorities = new HashSet<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getLogin() {
         return login;
@@ -178,6 +170,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.langKey = langKey;
     }
 
+
     public Set<Authority> getAuthorities() {
         return authorities;
     }
@@ -188,13 +181,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof User)) {
-            return false;
-        }
-        return id != null && id.equals(((User) o).id);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return login.equals(user.login);
     }
 
     @Override

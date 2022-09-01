@@ -16,6 +16,7 @@ plugins {
     id "org.springframework.boot"
     id "com.google.cloud.tools.jib"
     id "com.gorylenko.gradle-git-properties"
+    id "org.openapi.generator"
     id "org.liquibase.gradle"
     id "org.sonarqube"
     id "io.spring.nohttp"
@@ -34,6 +35,7 @@ assert System.properties["java.specification.version"] == "11" || "12" || "13" |
 
 apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
+apply from: "gradle/swagger.gradle"
 //jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
 
 if (project.hasProperty("prod") || project.hasProperty("gae")) {
@@ -96,12 +98,6 @@ test {
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
     reports.html.enabled = false
-
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
-        jvmArgs += [
-            "-XX:+AllowRedefinitionToAddDeleteMethods"
-        ]
-    }
 }
 
 modernizer {
@@ -152,6 +148,39 @@ task cucumberTestReport(type: TestReport) {
     reportOn cucumberTest
 }
 
+if (!project.hasProperty("runList")) {
+    project.ext.runList = "main"
+}
+
+project.ext.diffChangelogFile = "src/main/resources/config/liquibase/changelog/" + new Date().format("yyyyMMddHHmmss") + "_changelog.xml"
+
+liquibase {
+    activities {
+        main {
+            driver ""
+            url "jdbc:sqlserver://localhost:1433;database=uanfilms"
+            username "sa1"
+            password "123456"
+            changeLogFile "src/main/resources/config/liquibase/master.xml"
+            defaultSchemaName ""
+            logLevel "debug"
+            classpath "src/main/resources/"
+        }
+        diffLog {
+            driver ""
+            url "jdbc:sqlserver://localhost:1433;database=uanfilms"
+            username "sa1"
+            password "123456"
+            changeLogFile project.ext.diffChangelogFile
+            referenceUrl "hibernate:spring:edu.uanfilms.moviereview.domain?dialect=org.hibernate.dialect.SQLServer2012Dialect&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
+            defaultSchemaName ""
+            logLevel "debug"
+            classpath "$buildDir/classes/java/main"
+        }
+    }
+
+    runList = project.ext.runList
+}
 
 gitProperties {
     failOnNoGitDirectory = false
@@ -194,19 +223,23 @@ dependencies {
 
     // Use ", version: jhipsterDependenciesVersion, changing: true" if you want
     // to use a SNAPSHOT release instead of a stable release
-    implementation group: "tech.jhipster", name: "jhipster-framework", {
-        exclude group: "org.springframework", module: "spring-webmvc"
-    }
+    implementation group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '11.2.0.jre11'
+    implementation group: "tech.jhipster", name: "jhipster-framework"
     implementation "javax.annotation:javax.annotation-api"
+    implementation "org.springframework.boot:spring-boot-starter-cache"
     implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations"
-    implementation "commons-beanutils:commons-beanutils:${commonsBeanutilsVersion}"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     testImplementation "org.testcontainers:junit-jupiter"
     testImplementation "org.testcontainers:testcontainers"
-    implementation "org.springdoc:springdoc-openapi-webflux-core"
+    implementation "org.springdoc:springdoc-openapi-webmvc-core"
     implementation "com.zaxxer:HikariCP"
     implementation "org.apache.commons:commons-lang3"
+    implementation "org.openapitools:jackson-databind-nullable:${jacksonDatabindNullableVersion}"
+    implementation "javax.cache:cache-api"
+    implementation "org.ehcache:ehcache"
+    implementation "org.hibernate:hibernate-jcache"
     annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernateVersion}"
     implementation "org.hibernate:hibernate-core"
     implementation "org.hibernate.validator:hibernate-validator"
@@ -217,47 +250,33 @@ dependencies {
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-loader-tools"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
-    implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
     testImplementation "org.testcontainers:jdbc"
-    testImplementation "org.apache.commons:commons-collections4"
-    testImplementation "org.awaitility:awaitility:${awaitilityVersion}"
-    testImplementation "org.testcontainers:elasticsearch"
-    implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
-    implementation "org.springframework.boot:spring-boot-starter-validation"
-    implementation "org.springframework.data:spring-data-commons"
-    runtimeOnly "io.netty:netty-tcnative-boringssl-static"
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-mail"
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
-    implementation "org.springframework.boot:spring-boot-starter-webflux"
+    implementation "org.springframework.boot:spring-boot-starter-web"
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.springframework.boot:spring-boot-test"
     testImplementation "org.springframework.security:spring-security-test"
-    testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhoundJunitPlatformVersion}"
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junitPlatformLauncherVersion}'
     testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}"
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}"
-    implementation "org.zalando:problem-spring-webflux"
+    implementation "org.zalando:problem-spring-web"
+    implementation "org.springframework.boot:spring-boot-starter-undertow"
     implementation "io.jsonwebtoken:jjwt-api"
     if (!project.hasProperty("gae")) {
     runtimeOnly "io.jsonwebtoken:jjwt-impl"
-    implementation "io.jsonwebtoken:jjwt-jackson"
+    runtimeOnly "io.jsonwebtoken:jjwt-jackson"
     } else {
     implementation "io.jsonwebtoken:jjwt-impl"
     implementation "io.jsonwebtoken:jjwt-jackson"
     }
-    implementation "org.springframework.cloud:spring-cloud-starter-gateway"
-    implementation "com.github.vladimir-bukhtoyarov:bucket4j-core"
-    implementation "com.github.vladimir-bukhtoyarov:bucket4j-jcache"
     implementation "org.springframework.cloud:spring-cloud-starter"
-    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j"
-    implementation "com.playtika.reactivefeign:feign-reactor-webclient"
-    implementation "com.playtika.reactivefeign:feign-reactor-cloud"
-    implementation "com.playtika.reactivefeign:feign-reactor-spring-configuration"
+    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j"
     implementation "org.springframework.retry:spring-retry"
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
-    implementation "org.springframework.cloud:spring-cloud-starter-bootstrap"
+    implementation "org.springframework.security:spring-security-data"
     implementation "io.micrometer:micrometer-registry-prometheus"
     implementation "io.dropwizard.metrics:metrics-core"
     testImplementation "io.cucumber:cucumber-junit-platform-engine"
@@ -266,15 +285,8 @@ dependencies {
     testImplementation "org.junit.platform:junit-platform-console"
     testImplementation "org.testng:testng"
     liquibaseRuntime sourceSets.main.compileClasspath
-    OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem();
-    Architecture arch = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentArchitecture();
-    if (os.isMacOsX() && !arch.isAmd64()) {
-        implementation("io.netty:netty-resolver-dns-native-macos") {
-            artifact {
-                classifier = "osx-aarch_64"
-            }
-        }
-    }
+    liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibaseHibernate5Version}"
+    // https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 

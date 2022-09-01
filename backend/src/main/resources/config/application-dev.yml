@@ -20,39 +20,43 @@ logging:
     org.hibernate.SQL: DEBUG
     edu.uanfilms.moviereview: DEBUG
 
-management:
-  health:
-    elasticsearch:
-      enabled: false
-
 spring:
   devtools:
     restart:
       enabled: true
-      additional-exclude: static/**
+      additional-exclude: static/**,.h2.server.properties
     livereload:
       enabled: false # we use Webpack dev server + BrowserSync for livereload
   jackson:
     serialization:
       indent-output: true
-  data:
-  elasticsearch:
-    uris: http://localhost:9200
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:sqlserver://localhost:1433;database=uanfilms;trustServerCertificate=true
+    username: sa1
+    password: 123456
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+      maximum-pool-size: 1000
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  h2:
+    console:
+      # disable spring boot built-in h2-console since we start it manually with correct configuration
+      enabled: false
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServerDialect
+    show-sql: true
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
-    url: jdbc:sqlserver://localhost:1433;database=uanfilms
-  mail:
-    host: localhost
-    port: 25
-    username:
-    password:
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
-  r2dbc:
-    url: r2dbc:mssql://localhost:1433/uanfilms
-    username: SA
-    password: yourStrong(!)Password
   thymeleaf:
     cache: false
   sleuth:
@@ -80,32 +84,27 @@ server:
 # ===================================================================
 
 jhipster:
-  gateway:
-    rate-limiting:
-      enabled: false
-      limit: 100000
-      duration-in-seconds: 3600
-  # CORS is only enabled by default with the "dev" profile
-  cors:
-    # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
-    allowed-origins: 'http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000'
-    # Enable CORS when running in GitHub Codespaces
-    allowed-origin-patterns: 'https://*.githubpreview.dev'
-    allowed-methods: '*'
-    allowed-headers: '*'
-    exposed-headers: 'Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params'
-    allow-credentials: true
-    max-age: 1800
+  cache: # Cache configuration
+    ehcache: # Ehcache configuration
+      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
+      max-entries: 100 # Number of objects in each cache entry
+  # CORS is disabled by default on microservices, as you should access them through a gateway.
+  # If you want to enable it, please uncomment the configuration below.
+  # cors:
+  #   allowed-origins: "http://localhost:9000,https://localhost:9000"
+  #   allowed-methods: "*"
+  #   allowed-headers: "*"
+  #   exposed-headers: "Authorization,Link,X-Total-Count"
+  #   allow-credentials: true
+  #   max-age: 1800
   security:
     authentication:
       jwt:
         # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
-        base64-secret: Zjc3ZDI2MzcyYzI1MzI2YTljMzRmYjU4NWIxOTM4MmFlOWY5YmEzY2JhMmI5NTM4YmZlMjhlMjA3NWViNDEwNTU3MzFkMDc5YTQ1MDM3NmVjNWVkY2ViZmJiYWI4ODNjZTI2YmExZGIzZmI0ZjcyZTE4N2EwNGM2NjQzOTVmYmI=
+        base64-secret: MWMxNzMyNzcwYjYxZjdjYTRmYTdjOTgzOTYwNDE5OGE4MzNiMmNmNjU0MzRkN2YyN2YyYjE1OWRlNzNlMmU1NjYzMjk3YWNhZjE0YjNlNmE4Njc1NWI3YjYwYzZlZDk5YTViMmU5NWI0NTQ0YmE2YmVjYTAwNGNiZGQ1Nzk0YTY=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
-  mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: http://127.0.0.1:8080
   logging:
     use-json-format: false # By default, logs are not in Json format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration

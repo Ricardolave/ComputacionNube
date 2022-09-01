@@ -1,0 +1,36 @@
+{
+  "applications": ["uanfilms"],
+  "changelogDate": "20220831052919",
+  "clientRootFolder": "uanfilms",
+  "databaseType": "sql",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "genre",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "uanfilms",
+  "name": "Genre",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "movie",
+      "otherEntityRelationshipName": "genre",
+      "ownerSide": false,
+      "relationshipName": "movie",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "no",
+  "skipClient": true
+}
