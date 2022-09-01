@@ -1,0 +1,16 @@
+.active{
+    color: red;
+    font-weight: bold;
+}
+
+img{
+    max-width: 100%;
+}
+
+.fondo{
+    width: 5px;
+}
+
+.main-container{
+    background-image: url(../components/images/wp.jpg);
+}
