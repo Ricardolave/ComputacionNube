@@ -13,6 +13,7 @@ import SignUpPage from '../../login-react/src/pages/SignUpPage'
 import NotFoundPage from '../../login-react/src/pages/NotFoundPage'
 import AddMovie from '../../login-react/src/pages/AddMovie'
 import MovieInfo from '../../login-react/src/pages/MovieInfo'
+import TestGetPage from '../../login-react/src/pages/TestGetPage'
 
 //Se importan los componentes
 import NavBar from '../../login-react/src/components/Navbar'
@@ -51,6 +52,7 @@ function App() {
         <Route path="/about" element={<AboutPage/>}></Route>
         <Route path="/addmovie" element={<AddMovie/>}></Route>
         <Route path="/movieinfo/:movieID" element={<MovieInfo/>}></Route>
+        <Route path="/test" element={<TestGetPage/>}></Route>
         <Route path="*" element={<NotFoundPage/>}></Route>
     </Routes>
     

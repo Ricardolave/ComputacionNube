@@ -1,10 +1,14 @@
 import React from 'react'
 
+import { useState } from "react";
+import axios from "axios";
+
 import '../components/movielist.css'
 
 import { NavLink } from 'react-router-dom'
 
 export default function AboutPage(){
+
     return (
         <body class="main-container">
             <div class="container-fluid text-center" >
