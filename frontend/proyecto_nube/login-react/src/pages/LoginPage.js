@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 
+import AboutPage from '../pages/AboutPage'
+
 import '../components/signup.css'
 
 //Se importa NavLink para cambiar de ruta y no hacer un "refresh"
@@ -25,7 +27,7 @@ function App() {
         console.log("no enviar");
       }else{
         let res = await axios.post("http://localhost:3001/usuario/login",datos);
-        console.log(res.data);
+        return(<AboutPage/>)
       }
     };
   
