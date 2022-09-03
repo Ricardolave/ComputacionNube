@@ -1,9 +1,8 @@
 .main-container{
     background-image: url(../components/images/wp.jpg);
-    background-position: right;
-    background-attachment: fixed;
+    background-repeat: repeat;
+    background-size:contain;
     opacity: 0.5px;
-    height: 100vh;
 }
 
 .th {

@@ -6,9 +6,11 @@ import AboutPage from '../pages/AboutPage'
 import '../components/signup.css'
 
 //Se importa NavLink para cambiar de ruta y no hacer un "refresh"
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 function App() {
+
+    const navigate = useNavigate();
 
     const [datos, setDatos] = useState({
       usuario: "",
@@ -26,13 +28,13 @@ function App() {
       if(!e.target.checkValidity()){
         console.log("no enviar");
       }else{
-        let res = await axios.post("http://localhost:3001/usuario/login",datos);
-        return(<AboutPage/>)
+        let res = await axios.post("http://localhost:3001/usuarios",datos);
+        navigate('/about')
       }
     };
     
     return (
-      <section className="h-100" class="main-container">
+      <body class="main-container">
         <div className="container h-100" class="centrado">
             <div className="row justify-content-sm-center h-100">
                 <div className="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
@@ -84,9 +86,8 @@ function App() {
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-  
+        </div><br/><br/><br/>
+    </body>
     
     );
   }
