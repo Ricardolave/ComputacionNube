@@ -2,12 +2,13 @@ import React from 'react'
 import { useState } from "react";
 import axios from "axios";
 
+import { NavLink } from 'react-router-dom'
 import '../components/movielist.css'
 
 export default function AddMovie(){
 
     const [moviedata, setDatos] = useState({
-        title: "",
+        name: "",
         year: "",
         elenco: "",
         director: "",
@@ -26,11 +27,11 @@ export default function AddMovie(){
         if(!e.target.checkValidity()){
           console.log("no enviar");
         }else{
-          let res = await axios.post("http://localhost:3001/AddMovie",moviedata);
+            <NavLink to="/about"></NavLink>
+          let res = await axios.post("http://localhost:3001/movies",moviedata);
           console.log(res.data);
         }
     };
-
     return (
         <body class="main-container">
         <div class="container p-4 col-auto ">
@@ -46,7 +47,7 @@ export default function AddMovie(){
 
                                         <div align="left">
                                             <label className="mb-2 text-muted" htmlFor="email" align="left">Título</label>
-                                            <input type="text" class="form-control" name="title" id= "title" value = {moviedata.title} onChange={handleInputChange} autofocus/>
+                                            <input type="text" class="form-control" name="name" id= "title" value = {moviedata.title} onChange={handleInputChange} autofocus/>
                                         </div>
 
                                         <div align="left">
@@ -69,16 +70,15 @@ export default function AddMovie(){
                                             <input type="text" class="form-control" name="genero" id= "genero" value = {moviedata.genero} onChange={handleInputChange}autofocus/>
                                         </div>
 
-                                        <div align="left">
-                                            <label className="mb-2 text-muted" htmlFor="email" align="left">Reseña</label>                                
-                                            <textarea name="description" rows="2" class="form-control"></textarea>
-                                        </div>
-
                                     </div>
 
                                     <div class="form-group espaciosup2">
+                                        <NavLink to="/about">
+                                        <button class="btn btn-success btn-block bg-danger"> Cancelar</button>   
+                                        </NavLink>
                                         <button class="btn btn-success btn-block bg-info"> Añadir película</button>
                                     </div>
+                                    
                                 </form>
                         </div>
                     </div>

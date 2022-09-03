@@ -30,7 +30,7 @@ function App() {
         return(<AboutPage/>)
       }
     };
-  
+    
     return (
       <section className="h-100" class="main-container">
         <div className="container h-100" class="centrado">
