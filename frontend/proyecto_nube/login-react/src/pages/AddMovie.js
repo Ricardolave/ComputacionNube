@@ -2,10 +2,12 @@ import React from 'react'
 import { useState } from "react";
 import axios from "axios";
 
-import { NavLink } from 'react-router-dom'
+import { Navigate, NavLink, useNavigate } from 'react-router-dom';
 import '../components/movielist.css'
 
 export default function AddMovie(){
+
+    const navigate = useNavigate();
 
     const [moviedata, setDatos] = useState({
         name: "",
@@ -27,9 +29,9 @@ export default function AddMovie(){
         if(!e.target.checkValidity()){
           console.log("no enviar");
         }else{
-            <NavLink to="/about"></NavLink>
           let res = await axios.post("http://localhost:3001/movies",moviedata);
           console.log(res.data);
+          navigate('/about')
         }
     };
     return (
@@ -76,7 +78,7 @@ export default function AddMovie(){
                                         <NavLink to="/about">
                                         <button class="btn btn-success btn-block bg-danger"> Cancelar</button>   
                                         </NavLink>
-                                        <button class="btn btn-success btn-block bg-info"> Añadir película</button>
+                                        <button class="btn btn-success btn-block bg-info" type='submit'> Añadir película</button>
                                     </div>
                                     
                                 </form>
