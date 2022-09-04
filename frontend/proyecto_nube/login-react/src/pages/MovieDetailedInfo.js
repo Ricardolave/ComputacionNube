@@ -17,7 +17,7 @@ export default function MovieDetailedPage(){
     const [movie, setMovie] = useState(1)
 
     const peticionGet=async()=>{
-        await         axios.get(`http://localhost:3001/movies/${movieID}`)
+        await axios.get(`http://localhost:3001/movies/${movieID}`)
         .then(response=>{
           setMovie(response.data);
         }).catch(error=>{

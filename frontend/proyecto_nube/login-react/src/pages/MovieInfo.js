@@ -1,17 +1,40 @@
 import React from 'react'
-import {useParams} from 'react-router-dom'
+import {useParams, useNavigate} from 'react-router-dom'
 import StarRating from "../elementos/StarRating";
-import { useState } from "react";
+import { useState, useEffect, } from "react";
 import axios from "axios";
 
 export default function MovieInfo(){
+    const navigate = useNavigate();
     const {movieID} = useParams()
 
+    //Se solicitan los datos de la pelicula
+    const [movie, setMovie] = useState(1)
+
+
+
+    
+    //Variables para dar la calificación
     const [movierating, setDatos] = useState({
         calificacion: "",
         reseña: "",
         pelicula:""
       });
+
+
+    const peticionGet=async()=>{
+        await axios.get(`http://localhost:3001/resenas/${movieID}`)
+        .then(response=>{
+          setDatos(response.data);
+        }).catch(error=>{
+          console.log(error);
+        })
+      }
+      
+    useEffect(()=>{
+        peticionGet();
+        },[])
+
 
     const handleInputChange = (e) =>{
         let { name, value } = e.target;
@@ -25,33 +48,40 @@ export default function MovieInfo(){
         if(!e.target.checkValidity()){
           console.log("no enviar");
         }else{
-          let res = await axios.post("http://localhost:3001/movieinfo/:id",movierating);
+          let res = await axios.put(`http://localhost:3001/resenas/1`, movierating);
           console.log(res.data);
+          navigate('/about')
         }
     };
 
+
     return (
         <body class="main-container">
+
         <div class="container p-4 col-auto ">
             <div class="row">
                 <div class="col-md-4 mx-auto ">
                     <div class="card">
                         <div class="card-header bg-info text-center">
-                            <h3 class="text-light">Reseña de película</h3>
+                            <h3 class="text-light">Calificando la película: </h3>
                         </div>
                         <div class="card-body">
                                 <form onSubmit={handleSubmit} className="needs-validation" noValidate={true} autoComplete="off">
                                     <div class= "form-group">
-
                                         <div>
                                         <label className="mb-2 text-muted" htmlFor="email" align="left">Calificación</label>                                
 
-                                        <StarRating />
-
+                                        <select onChange={handleInputChange}  value={movierating.calificacion} name="calificacion">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                         </div>
                                         <div align="left">
                                             <label className="mb-2 text-muted" htmlFor="email" align="left">Reseña</label>                                
-                                            <input name="reseña" rows="2" class="form-control"  id= "reseña"  onChange={handleInputChange} autofocus></input>
+                                            <input name="reseña" rows="2" class="form-control"  id= "reseña"  onChange={handleInputChange} autofocus value={movierating.reseña}></input>
                                         </div>
 
                                     </div>

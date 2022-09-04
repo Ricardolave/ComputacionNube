@@ -33,8 +33,7 @@ export default function AddMovie(){
         if(!e.target.checkValidity()){
           console.log("no enviar");
         }else{
-          let res = await axios.post("http://localhost:3001/movies",moviedata);
-          console.log(res.data);
+          axios.post("http://localhost:3001/resenas/1",moviedata);
           navigate('/about')
         }
     };
