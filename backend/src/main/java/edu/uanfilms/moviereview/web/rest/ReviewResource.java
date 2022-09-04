@@ -1,17 +1,11 @@
 package edu.uanfilms.moviereview.web.rest;
 
-import edu.uanfilms.moviereview.domain.Movie;
 import edu.uanfilms.moviereview.domain.Review;
 import edu.uanfilms.moviereview.repository.MovieRepository;
 import edu.uanfilms.moviereview.repository.ReviewRepository;
 import edu.uanfilms.moviereview.service.CorrectionService;
 import edu.uanfilms.moviereview.web.rest.errors.BadRequestAlertException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.time.Instant;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import edu.uanfilms.moviereview.web.rest.vm.ReviewVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * REST controller for managing {@link edu.uanfilms.moviereview.domain.Review}.
@@ -55,15 +55,12 @@ public class ReviewResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/reviews")
-    public ResponseEntity<Review> createReview(@RequestBody Review review) throws URISyntaxException {
+    public ResponseEntity<Review> createReview(@RequestBody ReviewVM review) throws URISyntaxException {
         log.debug("REST request to save Review : {}", review);
-        if (review.getId() != null) {
-            throw new BadRequestAlertException("A new review cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        if (review.getComment() ==null) throw new BadRequestAlertException("A new review need comments", ENTITY_NAME, "idexists");
+        if (review.getComment() == null)
+            throw new BadRequestAlertException("A new review need comments", ENTITY_NAME, "idexists");
         review.setComment(correctionService.correct(review.getComment()));
-        review.setDate(Instant.now());
-        Review result = reviewRepository.save(review);
+        Review result = reviewRepository.save(review.toReview());
         return ResponseEntity
             .created(new URI("/api/reviews/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
