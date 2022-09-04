@@ -14,7 +14,8 @@ export default function AddMovie(){
         year: "",
         elenco: "",
         director: "",
-        genero: ""
+        genero: "",
+        sinopsis:"",
       });
 
     const handleInputChange = (e) =>{
