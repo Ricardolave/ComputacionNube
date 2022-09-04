@@ -1,10 +1,3 @@
-.main-container{
-    background-image: url(../components/images/wp.jpg);
-    background-position: right;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    height: 100vh;
-}
 
 .centrado{
     padding-top: 5%;

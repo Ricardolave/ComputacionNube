@@ -1,58 +1,97 @@
-import React from 'react'
+import { useState } from "react";
+import axios from "axios";
+
+import AboutPage from '../pages/AboutPage'
 
 import '../components/signup.css'
 
 //Se importa NavLink para cambiar de ruta y no hacer un "refresh"
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
-export default function SignUpPage(){
+export default function SignUp() {
+
+    const navigate = useNavigate();
+
+    const [datos, setDatos] = useState({
+      usuario: "",
+      clave: ""
+    });
+  
+    const handleInputChange = (e) =>{
+      let { name, value } = e.target;
+      let newDatos = {...datos, [name]: value};
+      setDatos(newDatos);
+    }
+  
+    const handleSubmit = async(e)=>{
+      e.preventDefault();
+      if(!e.target.checkValidity()){
+        console.log("no enviar");
+      }else{
+        let res = await axios.post("http://localhost:3001/usuarios",datos);
+        navigate('/login')
+      }
+    };
+    
     return (
-<body class="main-container">
-<div class="container p-4">
-    <div class="row">
-        <div class="col-md-4 mx-auto">
-            <div class="card text-center">
-
-                    <div class="card-body">
-                    <h1 className="fs-4 card-title fw-bold mb-4" align="left">Registro</h1>
-                            <form class="espaciosup">
-                                <div align="left">
-                                    <label className="mb-2 text-muted" htmlFor="email" align="left">Correo electrónico</label>
-                                    <input id="email" type="text" className="form-control" name="usuario" required autoFocus />
+    
+      <section class="main-container">
+        <div className="container h-100" class="centrado">
+            <div className="row justify-content-sm-center h-100">
+                <div className="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
+                    <div className="card shadow-lg">
+                        <div className="card-body p-5">
+                            <h1 className="fs-4 card-title fw-bold mb-4">Registro</h1>
+                            <form onSubmit={handleSubmit} className="needs-validation" noValidate={true} autoComplete="off">
+                                <div className="mb-3">
+                                    <label className="mb-2 text-muted" htmlFor="email">Nombre</label>
+                                    <input id="email" type="text" onChange={handleInputChange} value={datos.nombre} className="form-control" name="nombre" required autoFocus />
+                                    <div className="invalid-feedback">
+                                        Usuario inválido
+                                    </div>
                                 </div>
-                            <div align="left">
-                                <label className="mb-2 text-muted" htmlFor="email" align="left">Usuario</label>                                
-                                <input type="text" name="username"  class="form-control"/>
-                            </div>
-                            <div align="left">
-                                <label className="mb-2 text-muted" htmlFor="email" align="left">Contraseña</label>                                
-                                <input type="password" name="password" class="form-control" id="passwordInput"/>
-                            </div>
-                            <div class="mb-3" align="left">
-                                <label className="mb-2 text-muted" htmlFor="email" align="left">Repetir contraseña</label>                                
-                                <input type="password" name="password2" class="form-control" id="passwordInput"/>
-                            </div>
-
-                            <div class="espaciosup">
+                                <div className="mb-3">
+                                    <label className="mb-2 text-muted" htmlFor="email">Usuario</label>
+                                    <input id="email" type="text" onChange={handleInputChange} value={datos.usuario} className="form-control" name="usuario" required autoFocus />
+                                </div>
+                                <div className="mb-3">
+                                    <div className="mb-2 w-100">
+                                        <label className="text-muted" htmlFor="password">Contraseña</label>
+                                    </div>
+                                    <input id="password" type="password" onChange={handleInputChange} value={datos.clave} className="form-control" name="clave" required />
+                                    <div className="invalid-feedback">
+                                        Contraseña es requirida
+                                    </div>
+                                </div>
+                                <div className="d-flex align-items-center">
+                                    <div className="form-check">
+                                        <input type="checkbox" name="remember" id="remember" className="form-check-input" />
+                                        <label htmlFor="remember" className="form-check-label">Recordarme</label>
+                                    </div>
+                                    <button type="submit" className="btn btn-danger ms-auto">
+                                        <i className="bi bi-box-arrow-in-right"></i> Registrarse
+                                    </button>
+                                </div>
+                                <div>
                                     <NavLink to="/login" className="float-end">
-                                        ¿Ya tiene una cuenta? Inicie sesión aquí
+                                        ¿Ya está registrado? Inicie sesión aquí
                                     </NavLink>
-                            </div><br></br>
-
-                            <div class="espaciosup" className="d-flex align-items-center">
-                                <button type="submit" className="btn btn-primary ms-auto">
-                                    <i className="bi bi-box-arrow-in-right"></i> Registrarse
-                                </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div className="card-footer py-3 border-0">
+                            <div className="text-center">
+                                Todos los derechos reservados &copy; 2022
                             </div>
-                            
-                    </form>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-</body>
-
-
-    )
-}
+    </section>
+  
+    
+    );
+  }
+  
