@@ -1,8 +1,9 @@
 import React from 'react'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 import { Navigate, NavLink, useNavigate } from 'react-router-dom';
+
 import '../components/movielist.css'
 
 export default function AddMovie(){
@@ -19,7 +20,9 @@ export default function AddMovie(){
       });
 
     const handleInputChange = (e) =>{
+
         let { name, value } = e.target;
+        console.log(e.target)
         let newDatos = {...moviedata, [name]: value};
         setDatos(newDatos);
         console.log(newDatos)
@@ -35,6 +38,28 @@ export default function AddMovie(){
           navigate('/about')
         }
     };
+
+    //Se toman los generos para ponerlos en una lista
+
+    const [genero, setGenero]= useState([]);
+    const [tablaGenero, setTablaGenero]= useState([]);
+    
+  
+  const peticionGetGeneros=async()=>{
+    await axios.get("http://localhost:3001/generos")
+    .then(response=>{
+      setGenero(response.data);
+      setTablaGenero(response.data);
+    }).catch(error=>{
+      console.log(error);
+    })
+  }
+
+  useEffect(()=>{
+    peticionGetGeneros();
+    },[])
+
+
     return (
         <body class="main-container">
         <div class="container p-4 col-auto ">
@@ -69,10 +94,20 @@ export default function AddMovie(){
                                         </div>
 
                                         <div align="left">
-                                            <label className="mb-2 text-muted" htmlFor="email" align="left">Género</label>                                
-                                            <input type="text" class="form-control" name="genero" id= "genero" value = {moviedata.genero} onChange={handleInputChange}autofocus/>
+                                            <label className="mb-2 text-muted" htmlFor="email" align="left">Sinopsis</label>                                
+                                            <input type="text" class="form-control" name="sinopsis" id= "sinopsis" value = {moviedata.sinopsis} onChange={handleInputChange} autofocus/>
                                         </div>
 
+                                        <div align="left">
+                                            <label className="mb-2 text-muted" htmlFor="email" align="left">Género</label>                                
+                                            <select onChange={handleInputChange} value={moviedata.genero} name="genero">
+                                            {
+                                                genero.map(genero => (
+                                                    <option key={genero.id} value={genero.tipo}>{genero.tipo}</option>
+                                                ))
+                                            }
+                                            </select>                                        
+                                        </div>
                                     </div>
 
                                     <div class="form-group espaciosup2">

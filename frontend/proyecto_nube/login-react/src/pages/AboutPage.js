@@ -34,10 +34,12 @@ export default function AboutPage(){
     filtrar(e.target.value);
   }
   
+  //Filtrar por nombre, año, director o genero
   const filtrar=(terminoBusqueda)=>{
     var resultadosBusqueda=tablaMovies.filter((elemento)=>{
       if(elemento.name.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
-      || elemento.year.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
+      || elemento.director.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
+      || elemento.genero.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
       ){
         return elemento;
       }

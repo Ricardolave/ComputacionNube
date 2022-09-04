@@ -9,7 +9,8 @@ export default function MovieInfo(){
 
     const [movierating, setDatos] = useState({
         calificacion: "",
-        reseña: ""
+        reseña: "",
+        pelicula:""
       });
 
     const handleInputChange = (e) =>{
