@@ -7,9 +7,9 @@ import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.MSSQLServerContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 
-public class MsSqlServerContainer implements SqlTestContainer {
+public class MsSqlTestContainer implements SqlTestContainer {
 
-    private static final Logger log = LoggerFactory.getLogger(MsSqlServerContainer.class);
+    private static final Logger log = LoggerFactory.getLogger(MsSqlTestContainer.class);
 
     private MSSQLServerContainer<?> mSSQLServerContainer;
 

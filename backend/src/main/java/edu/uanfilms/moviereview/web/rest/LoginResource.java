@@ -51,11 +51,11 @@ public class LoginResource {
         if(loginVM.getUsername()== null)
             throw new BadRequestAlertException("A user must have an username", ENTITY_NAME, "nameNotFound");
         User user=userRepository.findByLogin(loginVM.getUsername());
-        var algo=user.getAuthorities();
+        if(user==null) throw new BadCredentialsException("Invalid Username");
         if(!Objects.equals(user.getPassword(), loginVM.getPassword())) throw  new BadCredentialsException("Invalid Password");
         if(!user.isActivated())throw  new BadCredentialsException("Invalid User, Contact your admin to be activated");
         if(user.getAuthorities().isEmpty())throw  new BadCredentialsException("Invalid User, Contact your admin to get a role");
-        Set<SimpleGrantedAuthority> authorities= user.getAuthorities().stream().map((auth)->{ return new SimpleGrantedAuthority(auth.getName());}).collect(Collectors.toSet());
+        Set<SimpleGrantedAuthority> authorities= user.getAuthorities().stream().map((auth)-> new SimpleGrantedAuthority(auth.getName())).collect(Collectors.toSet());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user.getLogin(),user.getPassword(),authorities);
         LoginDTO result= new LoginDTO(user,authorities);
         String jwtToken= tokenProvider.createToken(authentication,false);
@@ -63,21 +63,6 @@ public class LoginResource {
         return ResponseEntity
             .ok()
             .body(result);
-        //var algo=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword()));
-        /*
-        var algo=loginVM
-            .flatMap(login ->
-                authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword())
-                    )
-                    .flatMap(auth -> Mono.fromCallable(() -> auth))
-            )
-            .map(authentication -> { User authenticated= new User();
-                authenticated.setLogin(authentication.getName());
-                authenticated.setPassword(authentication.getCredentials().toString());
-//                        authenticated.setAuthorities((Set<Authority>) authentication.getAuthorities());
-                return authenticated;
-            });*/
     }
 
 }

@@ -24,8 +24,14 @@ function App() {
       if(!e.target.checkValidity()){
         console.log("no enviar");
       }else{
-        let res = await axios.post("http://localhost:3001/usuario/login",datos);
-        console.log(res.data);
+        let res = await axios.post("http://localhost:8080/api/authenticate",datos)
+		.then(response => {
+			console.log(response.data);	
+			const token = response.data.jwtToken 
+			localStorage.setItem("token", token);
+			console.log(token);	
+		})
+		.catch(err => console.log(err));; 
       }
     };
   

@@ -53,6 +53,7 @@ public class MovieResource {
         if (movie.getId() != null) {
             throw new BadRequestAlertException("A new movie cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        movie.setHash("");
         Movie result = movieRepository.save(movie);
         return ResponseEntity
             .created(new URI("/api/movies/" + result.getId()))

@@ -1,10 +1,14 @@
 package edu.uanfilms.moviereview.web.rest;
 
+import edu.uanfilms.moviereview.domain.Movie;
 import edu.uanfilms.moviereview.domain.Review;
+import edu.uanfilms.moviereview.repository.MovieRepository;
 import edu.uanfilms.moviereview.repository.ReviewRepository;
+import edu.uanfilms.moviereview.service.CorrectionService;
 import edu.uanfilms.moviereview.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,6 +30,9 @@ import tech.jhipster.web.util.ResponseUtil;
 public class ReviewResource {
 
     private final Logger log = LoggerFactory.getLogger(ReviewResource.class);
+    private final CorrectionService correctionService;
+
+    private final MovieRepository movieRepository;
 
     private static final String ENTITY_NAME = "uanfilmsReview";
 
@@ -34,7 +41,9 @@ public class ReviewResource {
 
     private final ReviewRepository reviewRepository;
 
-    public ReviewResource(ReviewRepository reviewRepository) {
+    public ReviewResource(CorrectionService correctionService, MovieRepository movieRepository, ReviewRepository reviewRepository) {
+        this.correctionService = correctionService;
+        this.movieRepository = movieRepository;
         this.reviewRepository = reviewRepository;
     }
 
@@ -51,6 +60,9 @@ public class ReviewResource {
         if (review.getId() != null) {
             throw new BadRequestAlertException("A new review cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if (review.getComment() ==null) throw new BadRequestAlertException("A new review need comments", ENTITY_NAME, "idexists");
+        review.setComment(correctionService.correct(review.getComment()));
+        review.setDate(Instant.now());
         Review result = reviewRepository.save(review);
         return ResponseEntity
             .created(new URI("/api/reviews/" + result.getId()))

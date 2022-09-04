@@ -32,7 +32,7 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:sqlserver://localhost:1433;database=uanfilms;trustServerCertificate=true
+    url: jdbc:sqlserver://localhost:1433;database=review;trustServerCertificate=true
     username: sa1
     password: 123456
     hikari:
@@ -49,9 +49,12 @@ spring:
     console:
       # disable spring boot built-in h2-console since we start it manually with correct configuration
       enabled: false
+
   jpa:
     database-platform: org.hibernate.dialect.SQLServerDialect
     show-sql: true
+    hibernate:
+      ddl-auto: none
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
@@ -90,13 +93,13 @@ jhipster:
       max-entries: 100 # Number of objects in each cache entry
   # CORS is disabled by default on microservices, as you should access them through a gateway.
   # If you want to enable it, please uncomment the configuration below.
-  # cors:
-  #   allowed-origins: "http://localhost:9000,https://localhost:9000"
-  #   allowed-methods: "*"
-  #   allowed-headers: "*"
-  #   exposed-headers: "Authorization,Link,X-Total-Count"
-  #   allow-credentials: true
-  #   max-age: 1800
+  cors:
+     allowed-origins: "http://localhost:3000,https://localhost:9000"
+     allowed-methods: "*"
+     allowed-headers: "*"
+     exposed-headers: "Authorization,Link,X-Total-Count"
+     allow-credentials: true
+     max-age: 1800
   security:
     authentication:
       jwt:

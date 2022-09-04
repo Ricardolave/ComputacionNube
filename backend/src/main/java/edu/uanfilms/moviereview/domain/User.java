@@ -54,31 +54,16 @@ public class User  implements Serializable {
     @NotNull
     private boolean activated = false;
 
-    @Size(min = 2, max = 10)
-    @Column(name="lang_key")
-    private String langKey;
-
     @Size(max = 256)
     @Column(name="image_url")
     private String imageUrl;
 
-    @Size(max = 20)
-    @Column(name="activation_key")
-    @JsonIgnore
-    private String activationKey;
-
-    @Size(max = 20)
-    @Column(name="reset_key")
-    @JsonIgnore
-    private String resetKey;
-
-    @Column(name="reset_date")
-    private Instant resetDate = null;
 
     @Transient
     @ManyToMany
     @JoinTable(name = "jhi_user_authority", joinColumns = @JoinColumn(name = "user_name"), inverseJoinColumns = @JoinColumn(name = "authority_name"))
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @Size(max = 50)
     private Set<Authority> authorities = new HashSet<>();
 
     public String getLogin() {
@@ -138,38 +123,6 @@ public class User  implements Serializable {
         this.activated = activated;
     }
 
-    public String getActivationKey() {
-        return activationKey;
-    }
-
-    public void setActivationKey(String activationKey) {
-        this.activationKey = activationKey;
-    }
-
-    public String getResetKey() {
-        return resetKey;
-    }
-
-    public void setResetKey(String resetKey) {
-        this.resetKey = resetKey;
-    }
-
-    public Instant getResetDate() {
-        return resetDate;
-    }
-
-    public void setResetDate(Instant resetDate) {
-        this.resetDate = resetDate;
-    }
-
-    public String getLangKey() {
-        return langKey;
-    }
-
-    public void setLangKey(String langKey) {
-        this.langKey = langKey;
-    }
-
 
     public Set<Authority> getAuthorities() {
         return authorities;
@@ -203,8 +156,6 @@ public class User  implements Serializable {
             ", email='" + email + '\'' +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated='" + activated + '\'' +
-            ", langKey='" + langKey + '\'' +
-            ", activationKey='" + activationKey + '\'' +
             "}";
     }
 }

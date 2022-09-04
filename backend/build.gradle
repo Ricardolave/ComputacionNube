@@ -132,7 +132,7 @@ task cucumberTest(type: Test) {
 
 check.dependsOn cucumberTest
 
-check.dependsOn integrationTest
+
 task testReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")
     reportOn test

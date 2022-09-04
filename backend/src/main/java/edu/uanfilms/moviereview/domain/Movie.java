@@ -1,5 +1,6 @@
 package edu.uanfilms.moviereview.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.Instant;
@@ -21,8 +22,7 @@ public class Movie implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -30,8 +30,8 @@ public class Movie implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NotNull
     @Column(name = "hash", nullable = false)
+    @JsonIgnore
     private String hash;
 
     @Column(name = "year")
