@@ -1,23 +1,30 @@
 package edu.uanfilms.moviereview.web.rest;
 
+import edu.uanfilms.moviereview.domain.Genre;
 import edu.uanfilms.moviereview.domain.Movie;
+import edu.uanfilms.moviereview.repository.GenreRepository;
 import edu.uanfilms.moviereview.repository.MovieRepository;
 import edu.uanfilms.moviereview.web.rest.errors.BadRequestAlertException;
+import edu.uanfilms.moviereview.web.rest.vm.MovieVM;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.ResponseUtil;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-import tech.jhipster.web.util.HeaderUtil;
-import tech.jhipster.web.util.ResponseUtil;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing {@link edu.uanfilms.moviereview.domain.Movie}.
@@ -36,8 +43,11 @@ public class MovieResource {
 
     private final MovieRepository movieRepository;
 
-    public MovieResource(MovieRepository movieRepository) {
+    private final GenreRepository genreRepository;
+
+    public MovieResource(MovieRepository movieRepository, GenreRepository genreRepository) {
         this.movieRepository = movieRepository;
+        this.genreRepository = genreRepository;
     }
 
     /**
@@ -48,13 +58,13 @@ public class MovieResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/movies")
-    public ResponseEntity<Movie> createMovie(@Valid @RequestBody Movie movie) throws URISyntaxException {
+    public ResponseEntity<Movie> createMovie(@Valid @RequestBody MovieVM movie) throws URISyntaxException {
         log.debug("REST request to save Movie : {}", movie);
-        if (movie.getId() != null) {
-            throw new BadRequestAlertException("A new movie cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        movie.setHash("");
-        Movie result = movieRepository.save(movie);
+        Genre foundGenre = genreRepository.findByName(movie.getGenres());
+        Movie movieToSave = movie.toMovie();
+        movieToSave.addGenre(new Genre(foundGenre.getId()));
+        movieToSave.setHash("sadsdasdas");
+        Movie result = movieRepository.save(movieToSave);
         return ResponseEntity
             .created(new URI("/api/movies/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -157,12 +167,12 @@ public class MovieResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of movies in body.
      */
     @GetMapping("/movies")
-    public List<Movie> getAllMovies(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<MovieVM> getAllMovies(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Movies");
         if (eagerload) {
-            return movieRepository.findAllWithEagerRelationships();
+            return movieRepository.findAllWithEagerRelationships().stream().map((movie) -> new MovieVM(movie)).collect(Collectors.toList());
         } else {
-            return movieRepository.findAll();
+            return movieRepository.findAll().stream().map((movie) -> new MovieVM(movie)).collect(Collectors.toList());
         }
     }
 
@@ -173,10 +183,15 @@ public class MovieResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the movie, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/movies/{id}")
-    public ResponseEntity<Movie> getMovie(@PathVariable Long id) {
+    public ResponseEntity<MovieVM> getMovie(@PathVariable Long id) {
         log.debug("REST request to get Movie : {}", id);
         Optional<Movie> movie = movieRepository.findOneWithEagerRelationships(id);
-        return ResponseUtil.wrapOrNotFound(movie);
+        if (movie.isPresent()) {
+            return ResponseEntity.ok().body(new MovieVM(movie.get()));
+        } else {
+            new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return null;
     }
 
     /**

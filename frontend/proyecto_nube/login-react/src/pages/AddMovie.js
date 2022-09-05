@@ -13,7 +13,6 @@ export default function AddMovie(){
     const [moviedata, setDatos] = useState({
         name: "",
         year: "",
-        elenco: "",
         director: "",
         genero: "",
         sinopsis:"",
@@ -33,8 +32,14 @@ export default function AddMovie(){
         if(!e.target.checkValidity()){
           console.log("no enviar");
         }else{
-          axios.post("http://localhost:3001/resenas/1",moviedata);
-          navigate('/about')
+			console.log(moviedata)
+          axios.post("http://localhost:8080/api/movies",moviedata)
+		  .then(response=>{
+           alert("Pelicula Creada")
+        })
+		 .catch(response => {console.log(response)
+            alert(response)})
+          
         }
     };
 
@@ -45,7 +50,7 @@ export default function AddMovie(){
     
   
   const peticionGetGeneros=async()=>{
-    await axios.get("http://localhost:3001/generos")
+    await axios.get("http://localhost:8080/api/genres")
     .then(response=>{
       setGenero(response.data);
       setTablaGenero(response.data);
@@ -82,10 +87,6 @@ export default function AddMovie(){
                                             <input type="text" class="form-control" name="year" id= "year" value = {moviedata.year} onChange={handleInputChange} autofocus/>
                                         </div>
 
-                                        <div align="left">
-                                            <label className="mb-2 text-muted" htmlFor="email" align="left">Elenco</label>                                
-                                            <input type="text" class="form-control" name="elenco" id= "elenco" value = {moviedata.elenco} onChange={handleInputChange} autofocus/>
-                                        </div>
 
                                         <div align="left">
                                             <label className="mb-2 text-muted" htmlFor="email" align="left">Director</label>                                

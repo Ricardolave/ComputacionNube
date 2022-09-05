@@ -23,16 +23,18 @@ export default function MovieInfo(){
 
 
     const peticionGet=async()=>{
-        await axios.get(`http://localhost:3001/resenas/${movieID}`)
+        await axios.get(`http://localhost:8080/api/reviews/${movieID}`)
         .then(response=>{
-          setDatos(response.data);
+	 setDatos(response.data);
         }).catch(error=>{
           console.log(error);
         })
       }
       
     useEffect(()=>{
-        peticionGet();
+        movierating.pelicula=movieID;
+		movierating.calificacion=1;
+		
         },[])
 
 
@@ -48,9 +50,19 @@ export default function MovieInfo(){
         if(!e.target.checkValidity()){
           console.log("no enviar");
         }else{
-          let res = await axios.put(`http://localhost:3001/resenas/1`, movierating);
-          console.log(res.data);
-          navigate('/about')
+			console.log(movierating);
+          let res = await axios
+		  .post(`http://localhost:8080/api/reviews/`, movierating)
+		  .then(response=>{
+				alert("Reseña creada")
+			    console.log(response.data);
+				navigate('/about');
+		  })
+		  .catch(error=>{
+			console.log(error);
+			alert(error);
+			});
+         
         }
     };
 

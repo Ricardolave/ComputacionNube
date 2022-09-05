@@ -2,14 +2,15 @@ package edu.uanfilms.moviereview.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Movie.
@@ -44,7 +45,6 @@ public class Movie implements Serializable {
     private String synopsis;
 
     @OneToMany(mappedBy = "movie")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "movie" }, allowSetters = true)
     private Set<Review> reviews = new HashSet<>();
 
@@ -57,10 +57,17 @@ public class Movie implements Serializable {
     @ManyToMany
     @JoinTable(name = "rel_movie__actor", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "actor_id"))
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "casts" }, allowSetters = true)
+    @JsonIgnoreProperties(value = {"casts"}, allowSetters = true)
     private Set<Actor> actors = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public Movie(Long id) {
+        this.id = id;
+    }
+
+    public Movie() {
+    }
 
     public Long getId() {
         return this.id;

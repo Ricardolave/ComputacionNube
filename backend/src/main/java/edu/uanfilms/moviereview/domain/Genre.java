@@ -1,12 +1,14 @@
 package edu.uanfilms.moviereview.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Genre.
@@ -18,11 +20,14 @@ public class Genre implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public Genre() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
+    @JsonProperty("tipo")
     @Column(name = "name")
     private String name;
 
@@ -31,8 +36,12 @@ public class Genre implements Serializable {
 
     @ManyToMany(mappedBy = "genres")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "reviews", "genres", "actors" }, allowSetters = true)
+    @JsonIgnoreProperties(value = {"reviews", "genres", "actors"}, allowSetters = true)
     private Set<Movie> movies = new HashSet<>();
+
+    public Genre(Long id) {
+        this.setId(id);
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 

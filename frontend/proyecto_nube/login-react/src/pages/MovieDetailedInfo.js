@@ -12,14 +12,17 @@ export default function MovieDetailedPage(){
 
     //Se solicita la id mediante los parámetros
     const {movieID} = useParams();
+	const [reviews, setReviews]= useState([]);
 
     //Se solicitan los datos de la pelicula
     const [movie, setMovie] = useState(1)
 
     const peticionGet=async()=>{
-        await axios.get(`http://localhost:3001/movies/${movieID}`)
+        await axios.get(`http://localhost:8080/api/movies/${movieID}`)
         .then(response=>{
           setMovie(response.data);
+		  console.log(response.data.reseñas)
+		  setReviews(response.data.reseñas)
         }).catch(error=>{
           console.log(error);
         })
@@ -42,16 +45,30 @@ export default function MovieDetailedPage(){
                                         </div>
                                         <div align="left">
                                             <label className="mb-2 text-muted" htmlFor="email" align="left">Año de lanzamiento: {movie.year}</label>                                
-                                        </div>
-                                        <div align="left">
-                                            <label className="mb-2 text-muted" htmlFor="email" align="left">Elenco: {movie.elenco}</label>                                
-                                        </div>
+                                        </div>                                      
                                         <div class="mb-3" align="left">
                                             <label className="mb-2 text-muted" htmlFor="email" align="left">Director: {movie.director}</label>                                
                                         </div>
                                         <div class="mb-3" align="left">
                                             <label className="mb-2 text-muted" htmlFor="email" align="left">Género: {movie.genero}</label>                                
                                         </div>
+										<div>
+										<h2 className="fs-4 card-title fw-bold mb-4" align="left">Reseñas</h2>
+										<table class="table table-bordered table-striped table-hover">
+					
+										{reviews &&  reviews.map(review => (
+											<tr key={review.id}>
+											<td>{review.calificacion}</td>
+											<td >{review.reseña}</td>
+       
+											</tr>
+
+										))
+										}							
+          
+										</table>
+										</div>
+											
 
                                         <div class="espaciosup">
                                                 <NavLink to="/about" className="float-end">
@@ -61,7 +78,11 @@ export default function MovieDetailedPage(){
                                                 </NavLink>
                                         </div><br></br>
                                     </form>
+									
+									
                             </div>
+							
+					
                     </div>
                 </div>
             </div>

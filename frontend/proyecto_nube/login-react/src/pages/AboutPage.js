@@ -20,7 +20,7 @@ export default function AboutPage(){
     
   
   const peticionGet=async()=>{
-    await axios.get("http://localhost:3001/movies")
+    await axios.get("http://localhost:8080/api/movies")
     .then(response=>{
       setMovies(response.data);
       setTablaMovies(response.data);
@@ -84,8 +84,9 @@ export default function AboutPage(){
                     <tbody>
                         {movies &&  movies.map(movies => (
                                 <tr key={movies.name}>
+								<td>{movies.name}</td>
                                 <td >{movies.year}</td>
-                                <td>{movies.name}</td>
+                             
                                 <td>
                                     <NavLink to={"/moviedetailed/" + movies.id}>
                                         <button class="btn btn-info espacioizq">

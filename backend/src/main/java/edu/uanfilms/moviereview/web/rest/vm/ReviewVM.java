@@ -15,7 +15,7 @@ public class ReviewVM {
     private String comment;
 
     @JsonProperty("pelicula")
-    private Movie movie;
+    private Integer movie;
 
     public Integer getScore() {
         return score;
@@ -33,11 +33,11 @@ public class ReviewVM {
         this.comment = comment;
     }
 
-    public Movie getMovie() {
+    public Integer getMovie() {
         return movie;
     }
 
-    public void setMovie(Movie movie) {
+    public void setMovie(Integer movie) {
         this.movie = movie;
     }
 
@@ -46,8 +46,16 @@ public class ReviewVM {
         review.setScore(this.getScore());
         review.setComment(this.getComment());
         review.setDate(Instant.now());
-        review.setMovie(this.getMovie());
+        review.setMovie(new Movie(Long.valueOf(this.movie)));
         return review;
     }
 
+    public ReviewVM(Review review) {
+        this.score = review.getScore();
+        this.movie = Math.toIntExact(review.getMovie().getId());
+        this.comment = review.getComment();
+    }
+
+    public ReviewVM() {
+    }
 }

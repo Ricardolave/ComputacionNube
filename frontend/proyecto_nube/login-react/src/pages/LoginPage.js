@@ -41,15 +41,17 @@ export default function LoginPage() {
       if(!e.target.checkValidity()){
         console.log("no enviar");
       }else{
-        let res = await axios.post("http://localhost:8080/api/authenticate,datos)
+        let res = await axios.post("http://localhost:8080/api/authenticate",datos)
         .then(response => {  navigate('/about')
             const token = response.data.jwtToken
             localStorage.setItem("token", token);
             console.log(token);
         })
 
-        .catch(response => {console.log(response)
-            alert(response)})
+        .catch(response => {
+			console.log(response)
+			console.log(response.response.data.detail)
+            alert(response.response.data.detail)})
       }
     };
 
