@@ -19,7 +19,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import {BrowserRouter, Route, Routes, Link, Switch} from 'react-router-dom';
 
 
-export default function LoginPage() {
+export default function App() {
 
     const [isAuth, setIsAuth] = useState(true);
 
