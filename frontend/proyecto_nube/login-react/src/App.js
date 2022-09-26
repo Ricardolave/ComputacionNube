@@ -19,7 +19,6 @@ import PrivateRoute from '../../login-react/src/pages/PrivateRoute'
 import global from '../../login-react/src/pages/global'
 
 //Se importan los componentes
-import NavBar from '../../login-react/src/components/Navbar'
 
 function App() {
 
