@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import React from 'react';
 
 //Se importa react-router-dom para las rutas
 import {BrowserRouter, Route, Routes, Link, Switch, NavLink, useNavigate} from 'react-router-dom';
