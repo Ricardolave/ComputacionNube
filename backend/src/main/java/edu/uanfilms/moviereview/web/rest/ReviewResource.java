@@ -59,8 +59,8 @@ public class ReviewResource {
         log.debug("REST request to save Review : {}", review);
         if (review.getComment() == null)
             throw new BadRequestAlertException("A new review need comments", ENTITY_NAME, "idexists");
-        review.setComment(correctionService.correct(review.getComment()));
-        Review result = reviewRepository.save(review.toReview());
+        Review reviewToSave = correctionService.correct(review.toReview());
+        Review result = reviewRepository.save(reviewToSave);
         return ResponseEntity
             .created(new URI("/api/reviews/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

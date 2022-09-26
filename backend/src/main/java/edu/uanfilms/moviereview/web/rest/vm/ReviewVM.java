@@ -11,7 +11,7 @@ public class ReviewVM {
     @JsonProperty("calificacion")
     private Integer score;
 
-    @JsonProperty("reseña")
+    @JsonProperty("comentario")
     private String comment;
 
     @JsonProperty("pelicula")

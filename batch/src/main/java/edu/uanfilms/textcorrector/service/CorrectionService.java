@@ -28,13 +28,13 @@ public class CorrectionService {
     }
     private File createFile(Review review) throws IOException{
         String localPath = System.getenv("BLOB_FILE_DIRECTORY");
-        String fileName = "\\review" + java.util.UUID.randomUUID() + ".txt";
+        String fileName = "//review" + java.util.UUID.randomUUID() + ".txt";
         File localFile = new File(localPath + fileName);
         // Write text to the file
         FileWriter writer = new FileWriter(localPath + fileName, true);
         writer.write("Reseña escrita \n");
         writer.write("Fecha: "+ Instant.now()+"\n");
-        writer.write("Codigo de pelicula: "+ review.getMovie() +"\n");
+        writer.write("pelicula: "+ review.getMovie().getName() +"\n");
         writer.write("Calificacion: "+ review.getScore()+"\n");
         writer.write("Comentario: "+ review.getComment()+"\n");
         writer.close();

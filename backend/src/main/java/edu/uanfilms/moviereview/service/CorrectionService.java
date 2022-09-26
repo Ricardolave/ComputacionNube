@@ -1,5 +1,6 @@
 package edu.uanfilms.moviereview.service;
 
+import edu.uanfilms.moviereview.domain.Review;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -10,13 +11,14 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class CorrectionService {
 
-    public String correct(String text){
-        RestTemplate template= new RestTemplate();
-        String url="http://localhost:8083/api/correct";
+    public Review correct(Review review) {
+        RestTemplate template = new RestTemplate();
+        //"http://localhost:8083/api/correctReview";
+        String url = System.getenv("BATCH_URL");
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
-        HttpEntity<String> httpEntity=new HttpEntity<>(text,headers);
-        ResponseEntity<String> response= template.postForEntity(url,httpEntity,String.class);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Review> httpEntity = new HttpEntity<Review>(review, headers);
+        ResponseEntity<Review> response = template.postForEntity(url, httpEntity, Review.class);
         return response.getBody();
     }
 }

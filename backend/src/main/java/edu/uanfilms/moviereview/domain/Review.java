@@ -1,11 +1,12 @@
 package edu.uanfilms.moviereview.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.io.Serializable;
-import java.time.Instant;
-import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.Instant;
 
 /**
  * A Review.
@@ -31,8 +32,19 @@ public class Review implements Serializable {
     @Column(name = "comment")
     private String comment;
 
+    @Column(name = "blob_path")
+    private String blobPath;
+
+    public String getBlobPath() {
+        return blobPath;
+    }
+
+    public void setBlobPath(String blobPath) {
+        this.blobPath = blobPath;
+    }
+
     @ManyToOne
-    @JsonIgnoreProperties(value = { "reviews", "genres", "actors" }, allowSetters = true)
+    @JsonIgnoreProperties(value = {"reviews", "genres", "actors"}, allowSetters = true)
     private Movie movie;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
