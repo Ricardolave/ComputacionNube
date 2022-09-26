@@ -65,7 +65,7 @@ function App() {
     <div>
 
     <Routes>
-        <Route element={<PrivateRoute isLogged={true}/>}>
+        <Route element={<PrivateRoute isLogged={false}/>}>
           <Route path="/" element={<Login/>}/>
           <Route path="/about" element={<AboutPage/>}/>
           <Route path="/login" element={<Login/>}></Route>

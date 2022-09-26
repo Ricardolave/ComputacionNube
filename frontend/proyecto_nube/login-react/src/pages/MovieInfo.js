@@ -10,14 +10,11 @@ export default function MovieInfo(){
 
     //Se solicitan los datos de la pelicula
     const [movie, setMovie] = useState(1)
-
-
-
     
     //Variables para dar la calificación
     const [movierating, setDatos] = useState({
         calificacion: "",
-        reseña: "",
+        comentario: "",
         pelicula:""
       });
 

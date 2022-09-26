@@ -21,8 +21,8 @@ export default function MovieDetailedPage(){
         await axios.get(`http://localhost:8080/api/movies/${movieID}`)
         .then(response=>{
           setMovie(response.data);
-		  console.log(response.data.reseñas)
-		  setReviews(response.data.reseñas)
+		  console.log(response.data.comentario)
+		  setReviews(response.data.comentario)
         }).catch(error=>{
           console.log(error);
         })
@@ -59,7 +59,7 @@ export default function MovieDetailedPage(){
 										{reviews &&  reviews.map(review => (
 											<tr key={review.id}>
 											<td>{review.calificacion}</td>
-											<td >{review.reseña}</td>
+											<td >{review.comentario}</td>
        
 											</tr>
 
