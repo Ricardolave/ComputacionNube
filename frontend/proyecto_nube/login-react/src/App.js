@@ -17,7 +17,6 @@ import MovieInfo from '../../login-react/src/pages/MovieInfo'
 import MovieDetailedInfo from '../../login-react/src/pages/MovieDetailedInfo'
 import TestGetPage from '../../login-react/src/pages/TestGetPage'
 import PrivateRoute from '../../login-react/src/pages/PrivateRoute'
-import global from '../../login-react/src/pages/global'
 
 //Se importan los componentes
 
