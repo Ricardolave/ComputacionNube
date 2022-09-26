@@ -15,7 +15,7 @@ public class Review {
 
     private String comment;
 
-    private Integer movie;
+    private Movie movie;
 
     private String blobPath;
 
@@ -27,11 +27,11 @@ public class Review {
         this.blobPath = blobPath;
     }
 
-    public Integer getMovie() {
+    public Movie getMovie() {
         return movie;
     }
 
-    public void setMovie(Integer movie) {
+    public void setMovie(Movie movie) {
         this.movie = movie;
     }
 
