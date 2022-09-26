@@ -3,6 +3,8 @@ import axios from "axios";
 
 import AboutPage from '../pages/AboutPage'
 
+import React, {Component} from 'react'
+
 import '../components/signup.css'
 
 //Se importa NavLink para cambiar de ruta y no hacer un "refresh"
