@@ -50,7 +50,7 @@ export default function AddMovie(){
     
   
   const peticionGetGeneros=async()=>{
-    await axios.get("http://localhost:8080/api/genres")
+    await axios.get("http://10.1.0.4:8080//api/genres")
     .then(response=>{
       setGenero(response.data);
       setTablaGenero(response.data);

@@ -42,7 +42,7 @@ export default function App() {
       if(!e.target.checkValidity()){
         console.log("no enviar");
       }else{
-        let res = await axios.post("http://10.1.0.4:8080/api/authenticate",datos)
+        let res = await axios.post("http://10.1.0.4:8080/localhost:8080/api/authenticate",datos)
         .then(response => {  navigate('/about')
             const token = response.data.jwtToken
             localStorage.setItem("token", token);
