@@ -18,7 +18,7 @@ export default function MovieDetailedPage(){
     const [movie, setMovie] = useState(1)
 
     const peticionGet=async()=>{
-        await axios.get(`http://localhost:8080/api/movies/${movieID}`)
+        await axios.get(`http://10.1.0.4:8080/api/movies/${movieID}`)
         .then(response=>{
           setMovie(response.data);
 		  console.log(response.data.comentario)

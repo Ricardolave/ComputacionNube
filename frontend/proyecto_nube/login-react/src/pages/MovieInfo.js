@@ -20,7 +20,7 @@ export default function MovieInfo(){
 
 
     const peticionGet=async()=>{
-        await axios.get(`http://localhost:8080/api/reviews/${movieID}`)
+        await axios.get(`http://10.1.0.4:8080/api/reviews/${movieID}`)
         .then(response=>{
 	 setDatos(response.data);
         }).catch(error=>{

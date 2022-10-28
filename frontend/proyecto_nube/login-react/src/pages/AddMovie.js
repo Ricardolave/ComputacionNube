@@ -33,7 +33,7 @@ export default function AddMovie(){
           console.log("no enviar");
         }else{
 			console.log(moviedata)
-          axios.post("http://localhost:8080/api/movies",moviedata)
+          axios.post("http://10.1.0.4:8080/api/movies",moviedata)
 		  .then(response=>{
            alert("Pelicula Creada")
         })

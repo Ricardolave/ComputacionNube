@@ -20,7 +20,7 @@ export default function AboutPage(){
     
   
   const peticionGet=async()=>{
-    await axios.get("http://localhost:8080/api/movies")
+    await axios.get("http://10.1.0.4:8080/api/movies")
     .then(response=>{
       setMovies(response.data);
       setTablaMovies(response.data);
