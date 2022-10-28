@@ -63,28 +63,7 @@ function App() {
   return (
     
     <div>
-
-    <Routes>
-        <Route element={<PrivateRoute isLogged={isAuth}/>}>
-          <Route path="/" element={<Login/>}/>
-          <Route path="/about" element={<AboutPage/>}/>
-          <Route path="/login" element={<Login/>}></Route>
-          <Route path="/signup" element={<SignUpPage/>}></Route>
-          <Route path="/addmovie" element={<AddMovie/>}></Route>
-          <Route path="/moviedetailed/:movieID" element={<MovieDetailedInfo/>}></Route>
-          <Route path="/movieinfo/:movieID" element={<MovieInfo/>}></Route>
-          <Route path="/test" element={<TestGetPage/>}></Route>
-        </Route>
-    </Routes>
-    
-
-  </div>
-  );
-
-  function Login(){
-
-    return(
-      <div>
+<div>
               <div className="container h-100" class="centrado">
             <div className="row justify-content-sm-center h-100">
                 <div className="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
@@ -140,7 +119,26 @@ function App() {
 
         </div>
       </div>
-    )
+    <Routes>
+        <Route element={<PrivateRoute isLogged={isAuth}/>}>
+          <Route path="/" element={<Login/>}/>
+          <Route path="/about" element={<AboutPage/>}/>
+          <Route path="/login" element={<Login/>}></Route>
+          <Route path="/signup" element={<SignUpPage/>}></Route>
+          <Route path="/addmovie" element={<AddMovie/>}></Route>
+          <Route path="/moviedetailed/:movieID" element={<MovieDetailedInfo/>}></Route>
+          <Route path="/movieinfo/:movieID" element={<MovieInfo/>}></Route>
+          <Route path="/test" element={<TestGetPage/>}></Route>
+        </Route>
+    </Routes>
+    
+
+  </div>
+  );
+
+  function Login(){
+    
+
   }
 }
 
