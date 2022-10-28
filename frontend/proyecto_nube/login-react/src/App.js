@@ -43,7 +43,7 @@ function App() {
     if(!e.target.checkValidity()){
       console.log("no enviar");
     }else{
-      let res = await axios.post("http://localhost:8080/api/authenticate",datos)
+      let res = await axios.post("http://10.1.0.4:8080//api/authenticate",datos)
       .then(response => {  
         setIsAuth(true)
         navigate('/about')
