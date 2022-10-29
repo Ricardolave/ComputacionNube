@@ -1,17 +1,15 @@
 import { useState } from "react";
+import '../src/elementos/Global'
 import axios from "axios";
 import React from 'react';
 
 //Se importa react-router-dom para las rutas
-import {BrowserRouter, Route, Routes, Link, Switch, NavLink, useNavigate} from 'react-router-dom';
+import { Route, Routes, NavLink, useNavigate} from 'react-router-dom';
 
 
 //Se importan las rutas
-import HomePage from '../../login-react/src/pages/HomePage'
 import AboutPage from '../../login-react/src/pages/AboutPage'
-import LoginPage from '../../login-react/src/pages/LoginPage'
 import SignUpPage from '../../login-react/src/pages/SignUpPage'
-import NotFoundPage from '../../login-react/src/pages/NotFoundPage'
 import AddMovie from '../../login-react/src/pages/AddMovie'
 import MovieInfo from '../../login-react/src/pages/MovieInfo'
 import MovieDetailedInfo from '../../login-react/src/pages/MovieDetailedInfo'
@@ -21,50 +19,75 @@ import PrivateRoute from '../../login-react/src/pages/PrivateRoute'
 //Se importan los componentes
 
 function App() {
-
-
-  const [isAuth, setIsAuth] = useState(true);
-
   const navigate = useNavigate();
 
-  const [datos, setDatos] = useState({
-    usuario: "",
-    clave: ""
-  });
-
-  const handleInputChange = (e) =>{
-    let { name, value } = e.target;
-    let newDatos = {...datos, [name]: value};
-    setDatos(newDatos);
-  }
-
-  const handleSubmit = async(e)=>{
-    e.preventDefault();
-    if(!e.target.checkValidity()){
-      console.log("no enviar");
-    }else{
-      let res = await axios.post("http://10.1.0.4:8080//api/authenticate",datos)
-      .then(response => {  
-        setIsAuth(true)
-        navigate('/about')
-          const token = response.data.jwtToken
-          localStorage.setItem("token", token);
-          console.log(token);
-      })
-
-      .catch(response => {
-    console.log(response)
-    console.log(response.response.data.detail)
-          alert(response.response.data.detail)})
-    }
-  };
-  
-
   return (
+    rutas()
+  );
+
+  function rutas(estado){
     
-    <div>
-<div>
-              <div className="container h-100" class="centrado">
+    estado = global.EstadoUsuario
+    return (
+      <div>
+      <Routes>
+      <Route path="/" element={<Login/>}/>
+          <Route element={<PrivateRoute isLogged={estado}/>}>
+            <Route path="/about" element={<AboutPage/>}/>
+            <Route path="/login" element={<Login/>}></Route>
+            <Route path="/signup" element={<SignUpPage/>}></Route>
+            <Route path="/addmovie" element={<AddMovie/>}></Route>
+            <Route path="/moviedetailed/:movieID" element={<MovieDetailedInfo/>}></Route>
+            <Route path="/movieinfo/:movieID" element={<MovieInfo/>}></Route>
+            <Route path="/test" element={<TestGetPage/>}></Route>
+          </Route>
+      </Routes>
+    </div>
+    );
+  }
+    
+  function Login(){
+
+    const [datos, setDatos] = useState({
+      usuario: "",
+      clave: ""
+    });
+  
+    const handleInputChange = (e) =>{
+      let { name, value } = e.target;
+      let newDatos = {...datos, [name]: value};
+      setDatos(newDatos);
+    }
+  
+    const handleSubmit = async(e)=>{
+
+      e.preventDefault();
+      if(!e.target.checkValidity()){
+        console.log("no enviar");
+      }else{
+        let res = await axios.post("http://10.1.0.4:8080//api/authenticate",datos)
+        .then(response => {  
+
+          global.EstadoUsuario = true
+          console.log(global.EstadoUsuario)
+
+          navigate('/about')
+            const token = response.data.jwtToken
+            localStorage.setItem("token", token);
+            console.log(token);
+        })
+  
+        .catch(response => {
+      console.log(response)
+      console.log(response.response.data.detail)
+            alert(response.response.data.detail)})
+      }
+    };
+
+    return(
+      
+      <div>
+            <div className="container h-100" class="centrado">
             <div className="row justify-content-sm-center h-100">
                 <div className="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
                     <div className="card shadow-lg">
@@ -119,26 +142,7 @@ function App() {
 
         </div>
       </div>
-    <Routes>
-        <Route element={<PrivateRoute isLogged={isAuth}/>}>
-          <Route path="/" element={<Login/>}/>
-          <Route path="/about" element={<AboutPage/>}/>
-          <Route path="/login" element={<Login/>}></Route>
-          <Route path="/signup" element={<SignUpPage/>}></Route>
-          <Route path="/addmovie" element={<AddMovie/>}></Route>
-          <Route path="/moviedetailed/:movieID" element={<MovieDetailedInfo/>}></Route>
-          <Route path="/movieinfo/:movieID" element={<MovieInfo/>}></Route>
-          <Route path="/test" element={<TestGetPage/>}></Route>
-        </Route>
-    </Routes>
-    
-
-  </div>
-  );
-
-  function Login(){
-    
-
+    )
   }
 }
 
