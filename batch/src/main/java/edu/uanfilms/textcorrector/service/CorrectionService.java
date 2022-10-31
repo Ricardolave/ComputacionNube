@@ -5,7 +5,6 @@ import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
-import edu.uanfilms.textcorrector.domain.BadWord;
 import edu.uanfilms.textcorrector.repository.CorrectionRepository;
 import edu.uanfilms.textcorrector.web.dto.Review;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,7 +55,7 @@ public class CorrectionService {
 
     public String correct(String comment) {
         String[] words= comment.split(" ");
-        List<String> badWords= correctionRepository.findAll().stream().map(badWord -> badWord.getWord()).collect(Collectors.toList());
+        List<String> badWords= correctionRepository.findAll().stream().map(badWord -> badWord.getWord().toUpperCase()).collect(Collectors.toList());
         StringBuilder sb= new StringBuilder();
         for (String word: words) {
             if(badWords.contains(word.toUpperCase())){
