@@ -32,9 +32,9 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:sqlserver://localhost:1433;database=review;trustServerCertificate=true
-    username: sa1
-    password: 123456
+    url: jdbc:sqlserver://uan.database.windows.net:1433;database=uanfilms;trustServerCertificate=true
+    username: adminuan
+    password: Octubre2022*
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -94,11 +94,11 @@ jhipster:
   # CORS is disabled by default on microservices, as you should access them through a gateway.
   # If you want to enable it, please uncomment the configuration below.
   cors:
-     allowed-origins: "http://localhost:3000,https://localhost:9000"
+     allowed-origins: "*"
      allowed-methods: "*"
      allowed-headers: "*"
      exposed-headers: "Authorization,Link,X-Total-Count"
-     allow-credentials: true
+     allow-credentials: false
      max-age: 1800
   security:
     authentication:

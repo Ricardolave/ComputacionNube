@@ -13,7 +13,6 @@ public class CorrectionService {
 
     public Review correct(Review review) {
         RestTemplate template = new RestTemplate();
-        //"http://localhost:8083/api/correctReview";
         String url = System.getenv("BATCH_URL");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
