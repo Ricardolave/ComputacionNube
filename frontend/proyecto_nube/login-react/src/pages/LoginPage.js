@@ -1,4 +1,5 @@
 import { useState } from "react";
+import React from 'react'
 import axios from "axios";
 
 import HomePage from '../pages/HomePage'
@@ -19,7 +20,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import {BrowserRouter, Route, Routes, Link, Switch} from 'react-router-dom';
 
 
-export default function LoginPage() {
+export default function App() {
 
     const [isAuth, setIsAuth] = useState(true);
 
@@ -41,7 +42,7 @@ export default function LoginPage() {
       if(!e.target.checkValidity()){
         console.log("no enviar");
       }else{
-        let res = await axios.post("http://localhost:8080/api/authenticate",datos)
+        let res = await axios.post("http://10.1.0.4:8080/localhost:8080/api/authenticate",datos)
         .then(response => {  navigate('/about')
             const token = response.data.jwtToken
             localStorage.setItem("token", token);
