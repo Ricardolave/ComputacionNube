@@ -30,7 +30,6 @@ public class User  implements Serializable {
 
     @NotNull
     @Id
-    @Size(min = 1, max = 50)
     private String login;
 
     @JsonIgnore
@@ -61,9 +60,9 @@ public class User  implements Serializable {
 
     @Transient
     @ManyToMany
-    @JoinTable(name = "jhi_user_authority", joinColumns = @JoinColumn(name = "user_name"), inverseJoinColumns = @JoinColumn(name = "authority_name"))
+    @JoinTable(name = "jhi_user_authority", joinColumns = @JoinColumn(name = "user_name", referencedColumnName="login"), inverseJoinColumns = @JoinColumn(name = "authority_name", referencedColumnName ="name" ))
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @Size(max = 50)
+    @Size(min = 1,max = 50)
     private Set<Authority> authorities = new HashSet<>();
 
     public String getLogin() {

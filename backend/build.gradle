@@ -158,9 +158,9 @@ liquibase {
     activities {
         main {
             driver ""
-            url "jdbc:sqlserver://localhost:1433;database=uanfilms"
-            username "sa1"
-            password "123456"
+            url "jdbc:sqlserver://uan.database.windows.net:1433;database=uanfilms"
+            username "adminuan"
+            password "Octubre2022*"
             changeLogFile "src/main/resources/config/liquibase/master.xml"
             defaultSchemaName ""
             logLevel "debug"
@@ -168,9 +168,9 @@ liquibase {
         }
         diffLog {
             driver ""
-            url "jdbc:sqlserver://localhost:1433;database=uanfilms"
-            username "sa1"
-            password "123456"
+            url "jdbc:sqlserver://uan.database.windows.net:1433;database=uanfilms"
+            username "adminuan"
+            password "Octubre2022*"
             changeLogFile project.ext.diffChangelogFile
             referenceUrl "hibernate:spring:edu.uanfilms.moviereview.domain?dialect=org.hibernate.dialect.SQLServer2012Dialect&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
             defaultSchemaName ""

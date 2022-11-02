@@ -20,7 +20,6 @@ public class Authority implements Serializable, Persistable<String> {
     private static final long serialVersionUID = 1L;
 
     @NotNull
-    @Size(max = 50)
     @Id
     private String name;
 
