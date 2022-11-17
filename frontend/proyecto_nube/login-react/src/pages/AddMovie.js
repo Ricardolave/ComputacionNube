@@ -33,7 +33,7 @@ export default function AddMovie(){
           console.log("no enviar");
         }else{
 			console.log(moviedata)
-          axios.post("http://10.1.0.4:8080/api/movies",moviedata)
+          axios.post("http://film-back.magotecnologia:8080/api/movies",moviedata)
 		  .then(response=>{
            alert("Pelicula Creada")
         })
@@ -50,10 +50,12 @@ export default function AddMovie(){
     
   
   const peticionGetGeneros=async()=>{
-    await axios.get("http://10.1.0.4:8080//api/genres")
+    await axios.get("http://film-back.magotecnologia:8080/api/genres")
     .then(response=>{
       setGenero(response.data);
       setTablaGenero(response.data);
+	  let newDatos = {...moviedata, ['genero']: response.data[0].tipo};
+	  setDatos(newDatos)
     }).catch(error=>{
       console.log(error);
     })

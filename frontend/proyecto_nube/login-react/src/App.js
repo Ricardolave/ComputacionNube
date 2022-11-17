@@ -65,7 +65,7 @@ function App() {
       if(!e.target.checkValidity()){
         console.log("no enviar");
       }else{
-        let res = await axios.post("http://10.1.0.4:8080//api/authenticate",datos)
+        let res = await axios.post("http://film-back.magotecnologia:8080/api/authenticate",datos)
         .then(response => {  
 
           global.EstadoUsuario = true

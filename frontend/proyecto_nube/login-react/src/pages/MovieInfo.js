@@ -20,7 +20,7 @@ export default function MovieInfo(){
 
 
     const peticionGet=async()=>{
-        await axios.get(`http://10.1.0.4:8080/api/reviews/${movieID}`)
+        await axios.get(`http://film-back.magotecnologia:8080/api/reviews/${movieID}`)
         .then(response=>{
 	 setDatos(response.data);
         }).catch(error=>{
@@ -49,7 +49,7 @@ export default function MovieInfo(){
         }else{
 			console.log(movierating);
           let res = await axios
-		  .post(`http://localhost:8080/api/reviews/`, movierating)
+		  .post(`http://film-back.magotecnologia:8080/api/reviews/`, movierating)
 		  .then(response=>{
 				alert("Reseña creada")
 			    console.log(response.data);
@@ -90,7 +90,7 @@ export default function MovieInfo(){
                                         </div>
                                         <div align="left">
                                             <label className="mb-2 text-muted" htmlFor="email" align="left">Reseña</label>                                
-                                            <input name="reseña" rows="2" class="form-control"  id= "reseña"  onChange={handleInputChange} autofocus value={movierating.reseña}></input>
+                                            <input name="comentario" rows="2" class="form-control"  id= "reseña"  onChange={handleInputChange} autofocus value={movierating.reseña}></input>
                                         </div>
 
                                     </div>
